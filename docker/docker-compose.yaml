@@ -1,0 +1,34 @@
+version: 'lastest'
+services:
+  db:
+    container_name: sql-server
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=true
+      - MSSQL_SA_PASSWORD=Senha123!
+    volumes:
+      -./db_volume:/var/opt/mssql/data
+    networks:
+      - application_network
+    image: 
+    
+  # api:
+  #   depends_on:
+  #     - db
+  #   image: node:latest
+  #   container_name: api
+  #   working_dir: /app
+  #   volumes:
+  #     - ../.:/app
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - aplication_network 
+  #   command: sh -c "nest start"  
+  
+networks:
+  application_network:
+    driver: bridge
+volumes:
+  db_volume:
