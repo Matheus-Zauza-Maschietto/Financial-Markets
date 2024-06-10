@@ -1,31 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { Wallet } from './wallet.entity';
-import {User} from "../../user/entities/user.entity";
+import { Wallet } from 'src/wallet/entities/wallet.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Person {
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
-    email: string;
-
-    @Column()
-    password: string;
-
-    @Column()
-    name: string;
-
-    @Column()
-    iddade: number;
-
-    @Column()
-    cpf: string;
-
-    @OneToOne(() => Wallet, wallet => wallet.person)
-    wallet: Wallet;
-
-    @OneToOne(() => User, user => user.person)
-    @JoinColumn()
-    user: User;
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  email: string;
+  @Column()
+  name: string;
+  @Column()
+  bornDate: Date;
+  @Column()
+  cpf: string;
+  @Column()
+  @OneToOne((p) => p.Id)
+  wallet: Wallet;
 }

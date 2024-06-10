@@ -4,26 +4,35 @@ import { AppService } from './app.service';
 import { StockSymbolModule } from './stock-symbol/stock-symbol.module';
 import { QuoteModule } from './quote/quote.module';
 import { FinnhubModule } from './finnhub/finnhub.module';
-import {ConfigModule} from "@nestjs/config";
-import {TypeOrmModule} from "@nestjs/typeorm";
-import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserController } from './user/user.controller';
+import { UsersModule } from './user/user.module';
 import { PersonModule } from './person/person.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'mssql',
+      //host: 'sql-server',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '1234',
-      database: 'acoes',
-      entities: [],
+      port: 1433,
+      username: 'sa',
+      password: 'Senha123!',
+      database: 'master',
       synchronize: true,
-      autoLoadEntities: true
+      logging: true,
     }),
-    StockSymbolModule, QuoteModule, FinnhubModule, UserModule, PersonModule],
-  controllers: [AppController],
+    StockSymbolModule,
+    QuoteModule,
+    FinnhubModule,
+    UsersModule,
+    PersonModule,
+    WalletModule,
+  ],
+  controllers: [AppController, UserController],
   providers: [AppService],
 })
 export class AppModule {}
