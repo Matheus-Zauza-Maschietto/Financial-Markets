@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user/user.controller';
 import { UsersModule } from './user/user.module';
+import { PersonModule } from './person/person.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -23,7 +25,13 @@ import { UsersModule } from './user/user.module';
       synchronize: true,
       logging: true,
     }),
-    StockSymbolModule, QuoteModule, FinnhubModule, UsersModule],
+    StockSymbolModule,
+    QuoteModule,
+    FinnhubModule,
+    UsersModule,
+    PersonModule,
+    WalletModule,
+  ],
   controllers: [AppController, UserController],
   providers: [AppService],
 })
