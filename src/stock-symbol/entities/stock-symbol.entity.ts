@@ -1,6 +1,11 @@
 import {IsOptional, IsString} from "class-validator";
+import {PrimaryGeneratedColumn} from "typeorm";
 
 export class StockSymbol {
+
+    @PrimaryGeneratedColumn("increment")
+    id: number;
+
     @IsString()
     currency: string;
 

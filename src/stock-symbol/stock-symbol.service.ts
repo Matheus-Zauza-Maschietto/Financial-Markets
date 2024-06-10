@@ -1,25 +1,32 @@
 import {Injectable} from '@nestjs/common';
 import {StockSymbol} from "./entities/stock-symbol.entity";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Repository} from "typeorm";
 
 @Injectable()
 export class StockSymbolService {
-  create(createStockSymbol: StockSymbol) {
-    return 'This action adds a new stockSymbol';
+
+  constructor(@InjectRepository(StockSymbol)private stockRepository: Repository<StockSymbol>,
+  ) {}
+
+  async findAll(): Promise<StockSymbol[]> {
+    return this.stockRepository.find();
   }
 
-  findAll() {
-    return `This action returns all stockSymbol`;
+  async findOne(id: number): Promise<StockSymbol> {
+    return this.stockRepository.findOneBy({id: id});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stockSymbol`;
+  async create(stock: StockSymbol): Promise<StockSymbol> {
+    return this.stockRepository.save(stock);
   }
 
-  update(id: number, updateStockSymbol: StockSymbol) {
-    return `This action updates a #${id} stockSymbol`;
+  async update(id: number, stock: Partial<StockSymbol>): Promise<StockSymbol> {
+    await this.stockRepository.update(id, stock);
+    return this.stockRepository.findOneBy({id: id});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} stockSymbol`;
+  async remove(id: number): Promise<void> {
+    await this.stockRepository.delete(id);
   }
 }

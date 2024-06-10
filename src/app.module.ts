@@ -6,6 +6,8 @@ import { QuoteModule } from './quote/quote.module';
 import { FinnhubModule } from './finnhub/finnhub.module';
 import {ConfigModule} from "@nestjs/config";
 import {TypeOrmModule} from "@nestjs/typeorm";
+import { UserModule } from './user/user.module';
+import { PersonModule } from './person/person.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -20,7 +22,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
       synchronize: true,
       autoLoadEntities: true
     }),
-    StockSymbolModule, QuoteModule, FinnhubModule],
+    StockSymbolModule, QuoteModule, FinnhubModule, UserModule, PersonModule],
   controllers: [AppController],
   providers: [AppService],
 })
