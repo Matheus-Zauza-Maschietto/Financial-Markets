@@ -2,23 +2,21 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 import {Wallet} from "../../wallet/entities/wallet.entity";
 import {User} from "../../user/entities/user.entity";
 
-
 @Entity()
 export class Person {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  email: string;
-
-  @Column()
-  password: string;
-
-  @Column()
   name: string;
 
+  @Column({
+    nullable: true,
+  })
+  bornDate: Date;
+
   @Column()
-  iddade: number;
+  idade: number;
 
   @Column()
   cpf: string;

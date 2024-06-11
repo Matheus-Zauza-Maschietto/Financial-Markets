@@ -7,12 +7,10 @@ export class User {
     id: number;
 
     @Column()
-    name: string;
+    email: string;
 
-    @Column({
-        nullable: true,
-    })
-    bornDate: Date;
+    @Column()
+    password: string;
 
     @OneToOne(() => Person, person => person.id)
     person: Person;
