@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
+import {Wallet} from "./entities/wallet.entity";
 
-@Controller('wallet')
+@Controller('wallets')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @Post()
-  create(@Body() createWalletDto: CreateWalletDto) {
-    return this.walletService.create(createWalletDto);
-  }
-
   @Get()
-  findAll() {
+  findAll(): Promise<Wallet[]> {
     return this.walletService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Wallet> {
     return this.walletService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-    return this.walletService.update(+id, updateWalletDto);
+  @Post()
+  create(@Body() wallet: Wallet): Promise<Wallet> {
+    return this.walletService.create(wallet);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<void> {
     return this.walletService.remove(+id);
   }
 }

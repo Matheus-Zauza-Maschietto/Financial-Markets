@@ -1,6 +1,7 @@
 import {IsOptional, IsString} from "class-validator";
-import {PrimaryGeneratedColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn} from "typeorm";
 
+@Entity()
 export class StockSymbol {
 
     @PrimaryGeneratedColumn("increment")

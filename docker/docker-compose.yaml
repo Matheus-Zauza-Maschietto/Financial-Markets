@@ -8,11 +8,11 @@ services:
       - ACCEPT_EULA=true
       - MSSQL_SA_PASSWORD=Senha123!
     volumes:
-      -./db_volume:/var/opt/mssql/data
+      - ./db_volume:/var/opt/mssql/data
     networks:
       - application_network
-    image: 
-    
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
   # api:
   #   depends_on:
   #     - db
