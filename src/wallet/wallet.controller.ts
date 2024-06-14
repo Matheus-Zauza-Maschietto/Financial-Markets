@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import {Wallet} from "./entities/wallet.entity";
+import { Wallet } from './entities/wallet.entity';
+import { DealException } from 'src/exceptions/deal.exception';
 
 @Controller('wallets')
 export class WalletController {
@@ -18,7 +19,15 @@ export class WalletController {
 
   @Post()
   create(@Body() wallet: Wallet): Promise<Wallet> {
+    //try{
     return this.walletService.create(wallet);
+    // }
+    // catch(e if e instanceof DealException){
+    //   return exception
+    // }
+    // catch(exception: Error){
+    //   return "Houve um erro inesperado";
+    // }
   }
 
   @Delete(':id')

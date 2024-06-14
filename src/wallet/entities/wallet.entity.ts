@@ -1,6 +1,6 @@
 import { Person } from 'src/person/entities/person.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import {IsNumber} from "class-validator";
+import { IsNumber } from 'class-validator';
 
 @Entity()
 export class Wallet {
@@ -11,6 +11,6 @@ export class Wallet {
   @IsNumber()
   value: number;
 
-  @OneToOne(() => Person, person => person.id)
+  @OneToOne(() => Person, (person) => person.id)
   person: Person;
 }
