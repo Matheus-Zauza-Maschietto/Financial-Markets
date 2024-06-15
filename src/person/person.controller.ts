@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { PersonService } from './person.service';
-import {Person} from "./entities/person.entity";
-import {CreatePersonDto} from "./dto/create-person.dto";
+import { Person } from './entities/person.entity';
+import { CreatePersonDto } from './dto/create-person.dto';
 
 @Controller('persons')
 export class PersonController {
