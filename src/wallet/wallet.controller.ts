@@ -5,7 +5,7 @@ import { Wallet } from './entities/wallet.entity';
 
 @Controller('wallets')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) { }
+  constructor(private readonly walletService: WalletService) {}
 
   @Get()
   findAll(): Promise<Wallet[]> {
