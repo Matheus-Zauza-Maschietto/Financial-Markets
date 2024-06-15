@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { Wallet } from './entities/wallet.entity';
 //import { DealException } from 'src/exceptions/deal.exception';
@@ -18,8 +18,8 @@ export class WalletController {
   }
 
   @Post()
-  create(@Body() wallet: Wallet): Promise<Wallet> {
-    return this.walletService.create(wallet);
+  create(): Promise<Wallet> {
+    return this.walletService.create(2);
   }
 
   @Delete(':id')

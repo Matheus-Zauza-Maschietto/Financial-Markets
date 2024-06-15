@@ -1,6 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import {Wallet} from "../../wallet/entities/wallet.entity";
-import {User} from "../../user/entities/user.entity";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Wallet } from '../../wallet/entities/wallet.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Person {
@@ -15,16 +21,13 @@ export class Person {
   })
   bornDate: Date;
 
-  @Column()
-  idade: number;
-
-  @Column()
+  @Column({ unique: true })
   cpf: string;
 
-  @OneToOne(() => Wallet, wallet => wallet.person)
+  @OneToOne(() => Wallet, (wallet) => wallet.person)
   wallet: Wallet;
 
-  @OneToOne(() => User, user => user.person)
+  @OneToOne(() => User, (user) => user.person)
   @JoinColumn()
   user: User;
 }
