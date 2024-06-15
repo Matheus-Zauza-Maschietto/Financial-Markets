@@ -5,7 +5,7 @@ import { Wallet } from './entities/wallet.entity';
 
 @Controller('wallets')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) { }
+  constructor(private readonly walletService: WalletService) {}
 
   @Get()
   findAll(): Promise<Wallet[]> {
@@ -19,15 +19,7 @@ export class WalletController {
 
   @Post()
   create(@Body() wallet: Wallet): Promise<Wallet> {
-    //try {
     return this.walletService.create(wallet);
-    // } catch (e) {
-    //   if (e instanceof DealException) {
-    //     return e.message;
-    //   } else {
-    //     return 'Houve um erro';
-    //   }
-    // }
   }
 
   @Delete(':id')

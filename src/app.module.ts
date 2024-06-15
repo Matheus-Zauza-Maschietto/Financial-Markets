@@ -1,20 +1,20 @@
-import {Module} from '@nestjs/common';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
-import {StockSymbolModule} from './stock-symbol/stock-symbol.module';
-import {QuoteModule} from './quote/quote.module';
-import {FinnhubModule} from './finnhub/finnhub.module';
-import {ConfigModule} from '@nestjs/config';
-import {TypeOrmModule} from '@nestjs/typeorm';
-import {PersonModule} from './person/person.module';
-import {WalletModule} from './wallet/wallet.module';
-import {CalledStockModule} from './called-stock/called-stock.module';
-import {UserModule} from "./user/user.module";
-import {Wallet} from "./wallet/entities/wallet.entity";
-import {Person} from "./person/entities/person.entity";
-import {User} from "./user/entities/user.entity";
-import {StockSymbol} from "./stock-symbol/entities/stock-symbol.entity";
-import {CalledStock} from "./called-stock/entities/called-stock.entity";
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { StockSymbolModule } from './stock-symbol/stock-symbol.module';
+import { QuoteModule } from './quote/quote.module';
+import { FinnhubModule } from './finnhub/finnhub.module';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PersonModule } from './person/person.module';
+import { WalletModule } from './wallet/wallet.module';
+import { CalledStockModule } from './called-stock/called-stock.module';
+import { UserModule } from './user/user.module';
+import { Wallet } from './wallet/entities/wallet.entity';
+import { Person } from './person/entities/person.entity';
+import { User } from './user/entities/user.entity';
+import { StockSymbol } from './stock-symbol/entities/stock-symbol.entity';
+import { CalledStock } from './called-stock/entities/called-stock.entity';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import {CalledStock} from "./called-stock/entities/called-stock.entity";
       autoLoadEntities: true,
       logging: true,
       entities: [Wallet, Person, User, CalledStock, StockSymbol],
-      options: {trustServerCertificate: true}
+      options: { trustServerCertificate: true },
     }),
     StockSymbolModule,
     QuoteModule,

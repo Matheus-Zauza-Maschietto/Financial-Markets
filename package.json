@@ -30,6 +30,7 @@
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
     "finnhub": "^1.2.18",
+    "mssql": "^10.0.2",
     "mysql2": "^3.10.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
