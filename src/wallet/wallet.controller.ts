@@ -19,15 +19,7 @@ export class WalletController {
 
   @Post()
   create(@Body() wallet: Wallet): Promise<Wallet> {
-    //try {
     return this.walletService.create(wallet);
-    // } catch (e) {
-    //   if (e instanceof DealException) {
-    //     return e.message;
-    //   } else {
-    //     return 'Houve um erro';
-    //   }
-    // }
   }
 
   @Delete(':id')
