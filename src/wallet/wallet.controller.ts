@@ -17,9 +17,9 @@ export class WalletController {
     return this.walletService.findOne(Number(id));
   }
 
-  @Post()
-  create(): Promise<Wallet> {
-    return this.walletService.create(2);
+  @Post(':id')
+  create(@Param('id') id: number): Promise<Wallet> {
+    return this.walletService.create(id);
   }
 
   @Delete(':id')

@@ -32,10 +32,10 @@ export class WalletService {
         'Não é permitido a criação de uma carteira sem o preenchimento das informações pessoais',
       );
     }
-
+    console.log(person);
     const newWallet: Wallet = new Wallet(null, 0, person);
 
-    return this.walletRepository.create(newWallet);
+    return this.walletRepository.save(newWallet);
   }
 
   async remove(id: number): Promise<void> {

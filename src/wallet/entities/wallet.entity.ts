@@ -20,6 +20,7 @@ export class Wallet {
   value: number;
 
   @OneToOne(() => Person, (person) => person.id)
+  @JoinColumn()
   person: Person;
 
   @OneToMany(() => CalledStock, (calledStock) => calledStock.id)
