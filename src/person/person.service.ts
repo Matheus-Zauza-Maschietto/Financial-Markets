@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Repository } from 'typeorm';
 import { Person } from './entities/person.entity';
@@ -12,8 +11,8 @@ export class PersonService {
     this.personRepository = personRepository;
   }
 
-  public async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    return this.personRepository.save(createPersonDto);
+  public async create(createPersonDto: Person): Promise<Person> {
+    return await this.personRepository.save(createPersonDto);
   }
 
   public async findAll(): Promise<Person[]> {

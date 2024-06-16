@@ -1,6 +1,14 @@
 import { Person } from 'src/person/entities/person.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IsNumber } from 'class-validator';
+import { CalledStock } from 'src/called-stock/entities/called-stock.entity';
 
 @Entity()
 export class Wallet {
@@ -12,5 +20,22 @@ export class Wallet {
   value: number;
 
   @OneToOne(() => Person, (person) => person.id)
+  @JoinColumn()
   person: Person;
+
+  @OneToMany(() => CalledStock, (calledStock) => calledStock.id)
+  @JoinColumn()
+  calledStocks: CalledStock[];
+
+  constructor(
+    id?: number,
+    value?: number,
+    person?: Person,
+    calledStocks?: CalledStock[],
+  ) {
+    this.id = id;
+    this.value = value;
+    this.person = person;
+    this.calledStocks = calledStocks;
+  }
 }

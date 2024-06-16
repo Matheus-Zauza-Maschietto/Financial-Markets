@@ -1,6 +1,7 @@
-export class DealException extends Error {
+import { HttpException, HttpStatus } from '@nestjs/common';
+
+export class DealException extends HttpException {
   constructor(message) {
-    super(message);
-    this.name = 'DealException';
+    super(message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

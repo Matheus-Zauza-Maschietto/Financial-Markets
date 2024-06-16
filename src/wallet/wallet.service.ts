@@ -22,9 +22,9 @@ export class WalletService {
     return this.walletRepository.findOneBy({ id });
   }
 
-  async create(wallet: Wallet): Promise<Wallet> {
+  async create(personId: number): Promise<Wallet> {
     const person: Person | null = await this.personRepository.findOneBy({
-      id: wallet.id,
+      id: personId,
     });
 
     if (!person) {
@@ -32,8 +32,10 @@ export class WalletService {
         'Não é permitido a criação de uma carteira sem o preenchimento das informações pessoais',
       );
     }
+    console.log(person);
+    const newWallet: Wallet = new Wallet(null, 0, person);
 
-    return this.walletRepository.save(wallet);
+    return this.walletRepository.save(newWallet);
   }
 
   async remove(id: number): Promise<void> {

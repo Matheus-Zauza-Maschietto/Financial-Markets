@@ -1,4 +1,4 @@
-import now = jest.now;
+//import now = jest.now;
 
 export class CreatePersonDto {
   public name: string;

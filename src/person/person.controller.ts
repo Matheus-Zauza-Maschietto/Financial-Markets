@@ -14,16 +14,24 @@ export class PersonController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Person> {
-    return this.personService.findOne(+id);
+    return this.personService.findOne(Number(id));
   }
 
   @Post()
-  create(@Body() person: CreatePersonDto): Promise<Person> {
-    return this.personService.create(person);
+  create(@Body() personDto: CreatePersonDto): Promise<Person> {
+    const newPerson: Person = {
+      bornDate: personDto.bornDate,
+      cpf: personDto.cpf,
+      name: personDto.name,
+      wallet: null,
+      user: null,
+      id: null,
+    };
+    return this.personService.create(newPerson);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
-    return this.personService.remove(+id);
+    return this.personService.remove(Number(id));
   }
 }
