@@ -15,6 +15,7 @@ import { Person } from './person/entities/person.entity';
 import { User } from './user/entities/user.entity';
 import { StockSymbol } from './stock-symbol/entities/stock-symbol.entity';
 import { CalledStock } from './called-stock/entities/called-stock.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CalledStock } from './called-stock/entities/called-stock.entity';
     PersonModule,
     WalletModule,
     CalledStockModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
