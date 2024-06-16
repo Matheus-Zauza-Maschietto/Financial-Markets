@@ -32,6 +32,7 @@ export class CalledStockService {
     calledStock.stockSymbol = await this.stockRepository.findOneBy({displaySymbol: symbol});
     calledStock.buyPrice = this.quoteService.getQuotePerSymbol(symbol).c;
 
+    console.log(calledStock)
     return this.calledStockRepository.save(calledStock);
   }
 

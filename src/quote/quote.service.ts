@@ -7,7 +7,7 @@ import {FinnhubService} from "../finnhub/finnhub.service";
 @Injectable()
 export class QuoteService {
   constructor(
-      @Inject(FinnhubService) private finnhubService: FinnhubService,
+      private readonly finnhubService: FinnhubService,
       @InjectRepository(Quote)private quoteRepository: Repository<Quote>,
   ) {}
 

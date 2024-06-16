@@ -35,7 +35,6 @@ import { CalledStock } from './called-stock/entities/called-stock.entity';
     }),
     StockSymbolModule,
     QuoteModule,
-    FinnhubModule,
     UserModule,
     PersonModule,
     WalletModule,
