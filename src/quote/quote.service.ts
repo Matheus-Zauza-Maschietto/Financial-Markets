@@ -1,11 +1,14 @@
-import {Injectable} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import {Quote} from "./entities/quote.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
+import {FinnhubService} from "../finnhub/finnhub.service";
 
 @Injectable()
 export class QuoteService {
-  constructor(@InjectRepository(Quote)private quoteRepository: Repository<Quote>,
+  constructor(
+      @Inject(FinnhubService) private finnhubService: FinnhubService,
+      @InjectRepository(Quote)private quoteRepository: Repository<Quote>,
   ) {}
 
   create(createQuote: Quote) {
@@ -26,5 +29,11 @@ export class QuoteService {
 
   remove(id: number) {
     return `This action removes a #${id} quote`;
+  }
+
+  getQuotePerSymbol(symbol: string): Quote{
+    return this.finnhubService.getConnection().quote(symbol, (error, data, response) => {
+      return data;
+    });
   }
 }

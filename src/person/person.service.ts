@@ -13,7 +13,7 @@ export class PersonService {
   }
 
   public async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    return await this.personRepository.create(createPersonDto);
+    return this.personRepository.save(createPersonDto);
   }
 
   public async findAll(): Promise<Person[]> {

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {StockSymbol} from "../../stock-symbol/entities/stock-symbol.entity";
 import {Wallet} from "../../wallet/entities/wallet.entity";
 import {IsDate, IsNumber, IsOptional, Min} from "class-validator";
@@ -10,9 +10,11 @@ export class CalledStock {
     id: number;
 
     @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
+    @JoinColumn()
     stockSymbol: StockSymbol;
 
     @ManyToOne(() => Wallet, wallet => wallet.id)
+    @JoinColumn()
     wallet: Wallet;
 
     @Column()

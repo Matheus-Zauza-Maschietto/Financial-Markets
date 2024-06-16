@@ -16,9 +16,11 @@ export class CalledStockController {
     return this.calledStockService.findOne(+id);
   }
 
-  @Post()
-  create(@Body() calledStock: CalledStock): Promise<CalledStock> {
-    return this.calledStockService.create(calledStock);
+  @Post(':displaySymbol')
+  async create(@Param('displaySymbol') symbol: string,
+               @Body() calledStock: CalledStock): Promise<CalledStock> {
+    const walletId: number = 1;
+    return await this.calledStockService.create(calledStock, walletId, symbol);
   }
 
   @Delete(':id')
