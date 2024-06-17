@@ -5,6 +5,7 @@ import {CalledStock} from "./entities/called-stock.entity";
 import {Wallet} from "../wallet/entities/wallet.entity";
 import {StockSymbol} from "../stock-symbol/entities/stock-symbol.entity";
 import {QuoteService} from "../quote/quote.service";
+import {Quote} from "../quote/entities/quote.entity";
 
 @Injectable()
 export class CalledStockService {
@@ -30,7 +31,14 @@ export class CalledStockService {
   async create(calledStock: CalledStock, walletId: number, symbol: string): Promise<CalledStock> {
     calledStock.wallet = await this.walletRepository.findOneBy({id: walletId});
     calledStock.stockSymbol = await this.stockRepository.findOneBy({displaySymbol: symbol});
-    calledStock.buyPrice = this.quoteService.getQuotePerSymbol(symbol).c;
+    console.log('UMMMMMMM')
+    //TODO: RESOLVER ESSE BO AQUI - API ESTA RETORNANDO O VALOR NO PARAMETRO E NÃO NO RETURN DANDO ERRO AO ACESSAR O .c
+    // console.log("API", this.quoteService.getQuotePerSymbol(symbol))
+    calledStock.buyPrice = (<Quote><unknown>this.quoteService.getQuotePerSymbol(symbol)).c;
+
+    // calledStock.buyPrice = (await this.quoteService.getQuotePerSymbol(symbol)).c;
+    console.log('DOSSSSSSS')
+    calledStock.calledDate = new Date();
 
     console.log(calledStock)
     return this.calledStockRepository.save(calledStock);

@@ -8,7 +8,6 @@ export class FinnhubService {
 
     constructor(private configService: ConfigService) {
         const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-        console.log(this.configService.get<string>('STOCK_KEY'));
         api_key.apiKey = this.configService.get<string>('STOCK_KEY');
         this.finnhubClient = new finnhub.DefaultApi();
     }

@@ -6,7 +6,7 @@ import {IsDate, IsNumber, IsOptional, Min} from "class-validator";
 
 @Entity()
 export class CalledStock {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
@@ -30,7 +30,9 @@ export class CalledStock {
     @IsNumber()
     buyPrice: number;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     @IsNumber()
     @IsOptional()
     sellPrice: number;

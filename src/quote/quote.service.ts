@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Injectable, Response} from '@nestjs/common';
 import {Quote} from "./entities/quote.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
@@ -31,9 +31,9 @@ export class QuoteService {
     return `This action removes a #${id} quote`;
   }
 
-  getQuotePerSymbol(symbol: string): Quote{
-    return this.finnhubService.getConnection().quote(symbol, (error, data, response) => {
-      return data;
-    });
+  async getQuotePerSymbol(symbol: string): Promise<any>{
+    const res: Response= this.finnhubService.getConnection().quote(symbol);
+    console.log(res);
+    return res;
   }
 }

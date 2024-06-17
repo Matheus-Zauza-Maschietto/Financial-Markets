@@ -2,11 +2,13 @@ import {Injectable} from '@nestjs/common';
 import {StockSymbol} from "./entities/stock-symbol.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
+import {FinnhubService} from "../finnhub/finnhub.service";
 
 @Injectable()
 export class StockSymbolService {
 
   constructor(@InjectRepository(StockSymbol)private stockRepository: Repository<StockSymbol>,
+              private readonly finnhubService: FinnhubService,
   ) {}
 
   async findAll(): Promise<StockSymbol[]> {
@@ -17,7 +19,7 @@ export class StockSymbolService {
     return this.stockRepository.findOneBy({id: id});
   }
 
-  async create(stock: StockSymbol): Promise<StockSymbol> {
+  async save(stock: StockSymbol): Promise<StockSymbol> {
     return this.stockRepository.save(stock);
   }
 
@@ -28,5 +30,18 @@ export class StockSymbolService {
 
   async remove(id: number): Promise<void> {
     await this.stockRepository.delete(id);
+  }
+
+  getValuesFromApi(): StockSymbol[]{
+    //TODO: Fazer ele salvar, mesmo B.O q em QUOTE está voltando o valor na DATA e não consigo dar o return nele, mas sim na request
+    // que seria a this.finnhubService.getConnection().stockSymbols()
+    return this.finnhubService.getConnection().stockSymbols("US", (error, data, response) => {
+      console.log(data)
+    });
+  }
+
+  saveFromApiToDataBase(){
+    const api: StockSymbol[] = this.getValuesFromApi();
+    return this.stockRepository.save(api);
   }
 }
