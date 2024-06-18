@@ -7,11 +7,6 @@ export class AppService {
 
   constructor() {}
   async getHello(): Promise<string> {
-    // this.finnhubService.getConnection().quote("AAPL", (error, data, response) => {
-    //   console.log(data)
-    //   this.quoteService.create(data);
-    // });
-    // console.log(await this.quoteService.findAll());
     return 'Hello World!';
   }
 }

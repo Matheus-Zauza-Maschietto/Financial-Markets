@@ -31,9 +31,11 @@ export class QuoteService {
     return `This action removes a #${id} quote`;
   }
 
-  async getQuotePerSymbol(symbol: string): Promise<any>{
-    const res: Response= this.finnhubService.getConnection().quote(symbol);
-    console.log(res);
-    return res;
+  async getQuotePerSymbol(symbol: string): Promise<Quote>{
+    return new Promise((resolve, reject) => {
+      this.finnhubService.getConnection().quote(symbol, (erro, data, response) => {
+        resolve(data);
+      });
+    });
   }
 }

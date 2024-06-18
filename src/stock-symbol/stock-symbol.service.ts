@@ -32,16 +32,24 @@ export class StockSymbolService {
     await this.stockRepository.delete(id);
   }
 
-  getValuesFromApi(): StockSymbol[]{
-    //TODO: Fazer ele salvar, mesmo B.O q em QUOTE está voltando o valor na DATA e não consigo dar o return nele, mas sim na request
-    // que seria a this.finnhubService.getConnection().stockSymbols()
-    return this.finnhubService.getConnection().stockSymbols("US", (error, data, response) => {
-      console.log(data)
-    });
+  async saveFromApiToDataBase() {
+    const api: StockSymbol[] = await this.getValuesFromApi();
+    const chunkSize = api.length > 100 ? 50 : api.length / 2;
+    let apiChunked: [StockSymbol[]] = [[]];
+    for (let i = 0; i < api.length; i += chunkSize) {
+      apiChunked.push(api.slice(i, i + chunkSize));
+    }
+    apiChunked.forEach(c =>
+      new Promise(() => this.stockRepository.save(c))
+    );
   }
 
-  saveFromApiToDataBase(){
-    const api: StockSymbol[] = this.getValuesFromApi();
-    return this.stockRepository.save(api);
+  private getValuesFromApi(): Promise<StockSymbol[]>{
+    return new Promise((resolve, reject) => {
+      this.finnhubService.getConnection().stockSymbols("US", { limit: 0 }, (error, data, response) => {
+        console.log(data)
+        resolve(data);
+      });
+    });
   }
 }

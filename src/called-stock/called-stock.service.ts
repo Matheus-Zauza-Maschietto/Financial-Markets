@@ -31,13 +31,7 @@ export class CalledStockService {
   async create(calledStock: CalledStock, walletId: number, symbol: string): Promise<CalledStock> {
     calledStock.wallet = await this.walletRepository.findOneBy({id: walletId});
     calledStock.stockSymbol = await this.stockRepository.findOneBy({displaySymbol: symbol});
-    console.log('UMMMMMMM')
-    //TODO: RESOLVER ESSE BO AQUI - API ESTA RETORNANDO O VALOR NO PARAMETRO E NÃO NO RETURN DANDO ERRO AO ACESSAR O .c
-    // console.log("API", this.quoteService.getQuotePerSymbol(symbol))
-    calledStock.buyPrice = (<Quote><unknown>this.quoteService.getQuotePerSymbol(symbol)).c;
-
-    // calledStock.buyPrice = (await this.quoteService.getQuotePerSymbol(symbol)).c;
-    console.log('DOSSSSSSS')
+    calledStock.buyPrice = (await this.quoteService.getQuotePerSymbol(symbol)).c;
     calledStock.calledDate = new Date();
 
     console.log(calledStock)
