@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import {StockSymbolService} from "./stock-symbol.service";
-import {StockSymbol} from "./entities/stock-symbol.entity";
+import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { StockSymbolService } from './stock-symbol.service';
+import { StockSymbol } from './entities/stock-symbol.entity';
 
 @Controller('stock-symbol')
 export class StockSymbolController {
@@ -21,9 +21,9 @@ export class StockSymbolController {
     return this.stockSymbolService.remove(id);
   }
 
-  @Get("/populate")
-  async populateDatabase(): Promise<String> {
+  @Get('/populate')
+  async populateDatabase(): Promise<string> {
     await this.stockSymbolService.saveFromApiToDataBase();
-    return 'DEU BOMMMMMM!!!!'
+    return 'DEU BOMMMMMM!!!!';
   }
 }

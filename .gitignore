@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-/db_volume/
+/docker/db_volume/
 
 # Logs
 logs

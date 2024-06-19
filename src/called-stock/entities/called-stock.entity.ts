@@ -1,38 +1,43 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {StockSymbol} from "../../stock-symbol/entities/stock-symbol.entity";
-import {Wallet} from "../../wallet/entities/wallet.entity";
-import {IsDate, IsNumber, IsOptional, Min} from "class-validator";
-
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { StockSymbol } from '../../stock-symbol/entities/stock-symbol.entity';
+import { Wallet } from '../../wallet/entities/wallet.entity';
+import { IsDate, IsNumber, IsOptional, Min } from 'class-validator';
 
 @Entity()
 export class CalledStock {
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
-    @JoinColumn()
-    stockSymbol: StockSymbol;
+  @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
+  @JoinColumn()
+  stockSymbol: StockSymbol;
 
-    @ManyToOne(() => Wallet, wallet => wallet.calledStocks)
-    wallet: Wallet;
+  @ManyToOne(() => Wallet, wallet => wallet.calledStocks)
+  wallet: Wallet;
 
-    @Column()
-    @IsNumber()
-    @Min(1)
-    quantity: number;
+  @Column()
+  @IsNumber()
+  @Min(1)
+  quantity: number;
 
-    @Column()
-    @IsDate()
-    calledDate: Date;
+  @Column()
+  @IsDate()
+  calledDate: Date;
 
-    @Column()
-    @IsNumber()
-    buyPrice: number;
+  @Column()
+  @IsNumber()
+  buyPrice: number;
 
-    @Column({
-        nullable: true
-    })
-    @IsNumber()
-    @IsOptional()
-    sellPrice: number;
+  @Column({
+    nullable: true
+  })
+  @IsNumber()
+  @IsOptional()
+  sellPrice: number;
 }
