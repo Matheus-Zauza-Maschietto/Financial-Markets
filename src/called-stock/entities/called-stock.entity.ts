@@ -13,8 +13,7 @@ export class CalledStock {
     @JoinColumn()
     stockSymbol: StockSymbol;
 
-    @ManyToOne(() => Wallet, wallet => wallet.id)
-    @JoinColumn()
+    @ManyToOne(() => Wallet, wallet => wallet.calledStocks)
     wallet: Wallet;
 
     @Column()

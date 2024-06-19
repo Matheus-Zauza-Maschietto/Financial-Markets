@@ -47,7 +47,6 @@ export class StockSymbolService {
   private getValuesFromApi(): Promise<StockSymbol[]>{
     return new Promise((resolve, reject) => {
       this.finnhubService.getConnection().stockSymbols("US", { limit: 0 }, (error, data, response) => {
-        console.log(data)
         resolve(data);
       });
     });

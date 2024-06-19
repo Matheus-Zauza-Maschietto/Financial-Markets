@@ -13,8 +13,8 @@ export class PersonController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Person> {
-    return this.personService.findOne(Number(id));
+  async findOne(@Param('id') id: number): Promise<Person> {
+    return await this.personService.findAllReletionById(id);
   }
 
   @Post()
