@@ -19,18 +19,6 @@ export class QuoteService {
     return this.quoteRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} quote`;
-  }
-
-  update(id: number, updateQuote: Quote) {
-    return `This action updates a #${id} quote`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} quote`;
-  }
-
   async getQuotePerSymbol(symbol: string): Promise<Quote> {
     return new Promise((resolve) => {
       this.finnhubService.getConnection().quote(symbol, (erro, data) => {

@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { Wallet } from './entities/wallet.entity';
-//import { DealException } from 'src/exceptions/deal.exception';
 
 @Controller('wallets')
 export class WalletController {

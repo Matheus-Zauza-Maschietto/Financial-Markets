@@ -14,11 +14,11 @@ export class CalledStock {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
+  @ManyToOne(() => StockSymbol, (stockSymbol) => stockSymbol.id)
   @JoinColumn()
   stockSymbol: StockSymbol;
 
-  @ManyToOne(() => Wallet, wallet => wallet.calledStocks)
+  @ManyToOne(() => Wallet, (wallet) => wallet.calledStocks)
   wallet: Wallet;
 
   @Column()
@@ -35,7 +35,7 @@ export class CalledStock {
   buyPrice: number;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   @IsNumber()
   @IsOptional()
