@@ -11,11 +11,11 @@ export class QuoteService {
     @InjectRepository(Quote) private quoteRepository: Repository<Quote>,
   ) {}
 
-  create(createQuote: Quote) {
+  async create(createQuote: Quote) {
     this.quoteRepository.save(createQuote);
   }
 
-  findAll(): Promise<Quote[]> {
+  async findAll(): Promise<Quote[]> {
     return this.quoteRepository.find();
   }
 

@@ -59,11 +59,14 @@ export class CalledStockService {
     const sellPrice: number = (
       await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol.symbol)
     ).c;
-    calledStock.wallet.value += sellPrice;
-    calledStock.sellPrice = sellPrice;
+    const wallet: Wallet = calledStock.wallet;
+    wallet.value += sellPrice * calledStock.quantity;
 
     this.walletRepository.save(calledStock.wallet);
 
-    await this.calledStockRepository.delete(id);
+    calledStock.sellPrice = sellPrice;
+    calledStock.deleted = true;
+
+    await this.calledStockRepository.save(calledStock);
   }
 }

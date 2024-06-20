@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { StockSymbol } from '../../stock-symbol/entities/stock-symbol.entity';
 import { Wallet } from '../../wallet/entities/wallet.entity';
-import { IsDate, IsNumber, IsOptional, Min } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber, IsOptional, Min } from 'class-validator';
 
 @Entity()
 export class CalledStock {
@@ -40,4 +40,8 @@ export class CalledStock {
   @IsNumber()
   @IsOptional()
   sellPrice: number;
+
+  @IsBoolean()
+  @IsOptional()
+  deleted: boolean;
 }
