@@ -1,14 +1,14 @@
-import {Injectable, Response} from '@nestjs/common';
-import {Quote} from "./entities/quote.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {FinnhubService} from "../finnhub/finnhub.service";
+import { Injectable } from '@nestjs/common';
+import { Quote } from './entities/quote.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { FinnhubService } from '../finnhub/finnhub.service';
 
 @Injectable()
 export class QuoteService {
   constructor(
-      private readonly finnhubService: FinnhubService,
-      @InjectRepository(Quote)private quoteRepository: Repository<Quote>,
+    private readonly finnhubService: FinnhubService,
+    @InjectRepository(Quote) private quoteRepository: Repository<Quote>,
   ) {}
 
   create(createQuote: Quote) {
@@ -31,9 +31,9 @@ export class QuoteService {
     return `This action removes a #${id} quote`;
   }
 
-  async getQuotePerSymbol(symbol: string): Promise<Quote>{
-    return new Promise((resolve, reject) => {
-      this.finnhubService.getConnection().quote(symbol, (erro, data, response) => {
+  async getQuotePerSymbol(symbol: string): Promise<Quote> {
+    return new Promise((resolve) => {
+      this.finnhubService.getConnection().quote(symbol, (erro, data) => {
         resolve(data);
       });
     });

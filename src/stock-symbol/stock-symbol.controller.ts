@@ -26,8 +26,8 @@ export class StockSymbolController {
     return toStockSymbolDTO(await stockSymbol);
   }
 
-  @Get("/api/populete")
-  async populateDatabase(): Promise<String> {
+  @Get('''/api/populete')
+  async populateDatabase(): Promise<string> {
     await this.stockSymbolService.saveFromApiToDataBase();
     return 'POPULOU O BANCO COM A API!!!!'
   }

@@ -1,14 +1,15 @@
-import {Injectable} from '@nestjs/common';
-import {StockSymbol} from "./entities/stock-symbol.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {FinnhubService} from "../finnhub/finnhub.service";
+import { Injectable } from '@nestjs/common';
+import { StockSymbol } from './entities/stock-symbol.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { FinnhubService } from '../finnhub/finnhub.service';
 
 @Injectable()
 export class StockSymbolService {
-
-  constructor(@InjectRepository(StockSymbol)private stockRepository: Repository<StockSymbol>,
-              private readonly finnhubService: FinnhubService,
+  constructor(
+    @InjectRepository(StockSymbol)
+    private stockRepository: Repository<StockSymbol>,
+    private readonly finnhubService: FinnhubService,
   ) {}
 
   async findAll(limit: number): Promise<StockSymbol[]> {
@@ -17,17 +18,17 @@ export class StockSymbolService {
   }
 
   async findById(id: number): Promise<StockSymbol> {
-    return this.stockRepository.findOneBy({id: id});
+    return this.stockRepository.findOneBy({ id: id });
   }
 
   async findBySymbol(symbol: string): Promise<StockSymbol> {
-    return this.stockRepository.findOneBy({displaySymbol: symbol});
+    return this.stockRepository.findOneBy({ displaySymbol: symbol });
   }
 
   async saveFromApiToDataBase(): Promise<void> {
     const api: StockSymbol[] = await this.getValuesFromApi();
     const chunkSize = api.length > 100 ? 50 : api.length / 2;
-    let apiChunked: [StockSymbol[]] = [[]];
+    const apiChunked: [StockSymbol[]] = [[]];
     for (let i = 0; i < api.length; i += chunkSize) {
       apiChunked.push(api.slice(i, i + chunkSize));
     }
@@ -38,7 +39,9 @@ export class StockSymbolService {
 
   private getValuesFromApi(): Promise<StockSymbol[]>{
     return new Promise((resolve, reject) => {
-      this.finnhubService.getConnection().stockSymbols("US", { limit: 0 }, (error, data, response) => {
+      this.finnhubService
+          .getConnection()
+          .stockSymbols('US', { limit: 0 }, (error, data, response) => {
         if(error){
           reject(error);
         }
