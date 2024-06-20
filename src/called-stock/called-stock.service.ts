@@ -36,7 +36,7 @@ export class CalledStockService {
     const calledStockSave: Promise<CalledStock> = this.calledStockRepository.save(calledStock);
 
     wallet.value -= calledStock.quantity*calledStock.buyPrice;
-    this.walletRepository.save(wallet);
+    await this.walletRepository.save(wallet);
 
     return calledStockSave;
   }

@@ -11,28 +11,20 @@ export class StockSymbolService {
               private readonly finnhubService: FinnhubService,
   ) {}
 
-  async findAll(): Promise<StockSymbol[]> {
-    return this.stockRepository.find();
+  async findAll(limit: number): Promise<StockSymbol[]> {
+    return !limit ? this.stockRepository.find() :
+        this.stockRepository.find({take: limit});
   }
 
-  async findOne(id: number): Promise<StockSymbol> {
+  async findById(id: number): Promise<StockSymbol> {
     return this.stockRepository.findOneBy({id: id});
   }
 
-  async save(stock: StockSymbol): Promise<StockSymbol> {
-    return this.stockRepository.save(stock);
+  async findBySymbol(symbol: string): Promise<StockSymbol> {
+    return this.stockRepository.findOneBy({displaySymbol: symbol});
   }
 
-  async update(id: number, stock: Partial<StockSymbol>): Promise<StockSymbol> {
-    await this.stockRepository.update(id, stock);
-    return this.stockRepository.findOneBy({id: id});
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.stockRepository.delete(id);
-  }
-
-  async saveFromApiToDataBase() {
+  async saveFromApiToDataBase(): Promise<void> {
     const api: StockSymbol[] = await this.getValuesFromApi();
     const chunkSize = api.length > 100 ? 50 : api.length / 2;
     let apiChunked: [StockSymbol[]] = [[]];
@@ -47,6 +39,9 @@ export class StockSymbolService {
   private getValuesFromApi(): Promise<StockSymbol[]>{
     return new Promise((resolve, reject) => {
       this.finnhubService.getConnection().stockSymbols("US", { limit: 0 }, (error, data, response) => {
+        if(error){
+          reject(error);
+        }
         resolve(data);
       });
     });

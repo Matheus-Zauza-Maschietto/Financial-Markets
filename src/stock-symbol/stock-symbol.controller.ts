@@ -1,29 +1,34 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Delete, Query} from '@nestjs/common';
 import {StockSymbolService} from "./stock-symbol.service";
 import {StockSymbol} from "./entities/stock-symbol.entity";
+import {StockSymbolDTO} from "./dto/stock-symbol-res.dto";
+import {toStockSymbolDTO} from "./converter/stock-symbol.converter";
 
 @Controller('stock-symbol')
 export class StockSymbolController {
   constructor(private readonly stockSymbolService: StockSymbolService) {}
 
   @Get()
-  findAll(): Promise<StockSymbol[]> {
-    return this.stockSymbolService.findAll();
+  async findAll(@Query('limit') limit?: number): Promise<StockSymbolDTO[]> {
+    const stockSymbols = await this.stockSymbolService.findAll(limit);
+    return stockSymbols.map(stockSymbol => toStockSymbolDTO(stockSymbol))
   }
 
-  @Get('/symbol/:id')
-  findOne(@Param('id') id: string): Promise<StockSymbol> {
-    return this.stockSymbolService.findOne(+id);
+  @Get('/:id')
+  async findOne(@Param('id') id: number): Promise<StockSymbolDTO> {
+    const stockSymbol  = this.stockSymbolService.findById(id);
+    return toStockSymbolDTO(await stockSymbol);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.stockSymbolService.remove(id);
+  @Get('/symbol/:symbol')
+  async findSymbol(@Param('symbol') symbol: string): Promise<StockSymbolDTO> {
+    const stockSymbol = this.stockSymbolService.findBySymbol(symbol);
+    return toStockSymbolDTO(await stockSymbol);
   }
 
-  @Get("/populate")
+  @Get("/api/populete")
   async populateDatabase(): Promise<String> {
     await this.stockSymbolService.saveFromApiToDataBase();
-    return 'DEU BOMMMMMM!!!!'
+    return 'POPULOU O BANCO COM A API!!!!'
   }
 }

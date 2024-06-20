@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {CalledStock} from "./entities/called-stock.entity";
 import {CalledStockService} from "./called-stock.service";
+import {CreateCalledStockDto} from "./dto/create-called-stock.dto";
+import {toCalledStock} from "./converter/create-called-stock.converter";
 
 @Controller('calledstocks')
 export class CalledStockController {
@@ -18,13 +20,13 @@ export class CalledStockController {
 
   @Post(':displaySymbol')
   async create(@Param('displaySymbol') symbol: string,
-               @Body() calledStock: CalledStock): Promise<CalledStock> {
+               @Body() calledStock: CreateCalledStockDto): Promise<CalledStock> {
     const walletId: number = 1;
-    return await this.calledStockService.create(calledStock, walletId, symbol);
+    return await this.calledStockService.create(toCalledStock(calledStock), walletId, symbol);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.calledStockService.remove(+id);
+  remove(@Param('id') id: number): Promise<void> {
+    return this.calledStockService.remove(id);
   }
 }
