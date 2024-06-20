@@ -20,11 +20,11 @@ export class CalledStockService {
   ) {}
 
   findAll(): Promise<CalledStock[]> {
-    return this.calledStockRepository.find();
+    return this.calledStockRepository.findBy({ deleted: false });
   }
 
   findOne(id: number): Promise<CalledStock> {
-    return this.calledStockRepository.findOneBy({ id });
+    return this.calledStockRepository.findOneBy({ id: id, deleted: false });
   }
 
   async create(
