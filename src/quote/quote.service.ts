@@ -11,24 +11,12 @@ export class QuoteService {
     @InjectRepository(Quote) private quoteRepository: Repository<Quote>,
   ) {}
 
-  create(createQuote: Quote) {
+  async create(createQuote: Quote) {
     this.quoteRepository.save(createQuote);
   }
 
-  findAll(): Promise<Quote[]> {
+  async findAll(): Promise<Quote[]> {
     return this.quoteRepository.find();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} quote`;
-  }
-
-  update(id: number, updateQuote: Quote) {
-    return `This action updates a #${id} quote`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} quote`;
   }
 
   async getQuotePerSymbol(symbol: string): Promise<Quote> {

@@ -1,47 +1,72 @@
-import {Inject, Injectable} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
-import {CalledStock} from "./entities/called-stock.entity";
-import {Wallet} from "../wallet/entities/wallet.entity";
-import {StockSymbol} from "../stock-symbol/entities/stock-symbol.entity";
-import {QuoteService} from "../quote/quote.service";
+import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CalledStock } from './entities/called-stock.entity';
+import { Wallet } from '../wallet/entities/wallet.entity';
+import { StockSymbol } from '../stock-symbol/entities/stock-symbol.entity';
+import { QuoteService } from '../quote/quote.service';
 
 @Injectable()
 export class CalledStockService {
   constructor(
-      @InjectRepository(CalledStock)
-      private calledStockRepository: Repository<CalledStock>,
-      @InjectRepository(Wallet)
-      private walletRepository: Repository<Wallet>,
-      @InjectRepository(StockSymbol)
-      private stockRepository: Repository<StockSymbol>,
-      @Inject(QuoteService)
-      private quoteService: QuoteService
+    @InjectRepository(CalledStock)
+    private calledStockRepository: Repository<CalledStock>,
+    @InjectRepository(Wallet)
+    private walletRepository: Repository<Wallet>,
+    @InjectRepository(StockSymbol)
+    private stockRepository: Repository<StockSymbol>,
+    @Inject(QuoteService)
+    private quoteService: QuoteService,
   ) {}
 
   findAll(): Promise<CalledStock[]> {
-    return this.calledStockRepository.find();
+    return this.calledStockRepository.findBy({ deleted: false });
   }
 
   findOne(id: number): Promise<CalledStock> {
-    return this.calledStockRepository.findOneBy({ id });
+    return this.calledStockRepository.findOneBy({ id: id, deleted: false });
   }
 
-  async create(calledStock: CalledStock, walletId: number, symbol: string): Promise<CalledStock> {
-    const wallet: Wallet = await this.walletRepository.findOneBy({id: walletId});
+  async create(
+    calledStock: CalledStock,
+    walletId: number,
+    symbol: string,
+  ): Promise<CalledStock> {
+    const wallet: Wallet = await this.walletRepository.findOneBy({
+      id: walletId,
+    });
     calledStock.wallet = wallet;
-    calledStock.stockSymbol = await this.stockRepository.findOneBy({displaySymbol: symbol});
-    calledStock.buyPrice = (await this.quoteService.getQuotePerSymbol(symbol)).c;
+    calledStock.stockSymbol = await this.stockRepository.findOneBy({
+      displaySymbol: symbol,
+    });
+    calledStock.buyPrice = (
+      await this.quoteService.getQuotePerSymbol(symbol)
+    ).c;
     calledStock.calledDate = new Date();
-    const calledStockSave: Promise<CalledStock> = this.calledStockRepository.save(calledStock);
+    const calledStockSave: Promise<CalledStock> =
+      this.calledStockRepository.save(calledStock);
 
-    wallet.value -= calledStock.quantity*calledStock.buyPrice;
-    await this.walletRepository.save(wallet);
+    wallet.value -= calledStock.quantity * calledStock.buyPrice;
+    this.walletRepository.save(wallet);
 
     return calledStockSave;
   }
 
   async remove(id: number): Promise<void> {
-    await this.calledStockRepository.delete(id);
+    const calledStock: CalledStock = await this.calledStockRepository.findOneBy(
+      { id: id },
+    );
+    const sellPrice: number = (
+      await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol.symbol)
+    ).c;
+    const wallet: Wallet = calledStock.wallet;
+    wallet.value += sellPrice * calledStock.quantity;
+
+    this.walletRepository.save(calledStock.wallet);
+
+    calledStock.sellPrice = sellPrice;
+    calledStock.deleted = true;
+
+    await this.calledStockRepository.save(calledStock);
   }
 }

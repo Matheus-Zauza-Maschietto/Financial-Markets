@@ -27,14 +27,26 @@ export class StockSymbolService {
 
   async saveFromApiToDataBase(): Promise<void> {
     const api: StockSymbol[] = await this.getValuesFromApi();
-    const chunkSize = api.length > 100 ? 50 : api.length / 2;
-    const apiChunked: [StockSymbol[]] = [[]];
-    for (let i = 0; i < api.length; i += chunkSize) {
-      apiChunked.push(api.slice(i, i + chunkSize));
+
+    // const chunkSize = api.length > 100 ? 50 : api.length / 2;
+    // const apiChunked: [StockSymbol[]] = [[]];
+    // for (let i = 0; i < api.length; i += chunkSize) {
+    //   apiChunked.push(api.slice(i, i + chunkSize));
+    // }
+    // await Promise.all(apiChunked.map((c) => new Promise(() => this.stockRepository.save(c))));
+    // apiChunked.forEach(c =>
+    //   new Promise(() => this.stockRepository.save(c))
+    // );
+
+    for (let i = 0; i < api.length; i += 200) {
+      console.log(`${i} - ${api.length - i > 200 ? 200 : api.length - i}`);
+      this.stockRepository
+        .createQueryBuilder()
+        .insert()
+        .into(StockSymbol)
+        .values(api.slice(i, i + 200 > api.length ? api.length : i + 200))
+        .execute();
     }
-    apiChunked.forEach(c =>
-      new Promise(() => this.stockRepository.save(c))
-    );
   }
 
   private getValuesFromApi(): Promise<StockSymbol[]>{

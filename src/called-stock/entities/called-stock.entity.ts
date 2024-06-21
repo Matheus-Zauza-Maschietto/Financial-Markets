@@ -7,18 +7,18 @@ import {
 } from 'typeorm';
 import { StockSymbol } from '../../stock-symbol/entities/stock-symbol.entity';
 import { Wallet } from '../../wallet/entities/wallet.entity';
-import { IsDate, IsNumber, IsOptional, Min } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber, IsOptional, Min } from 'class-validator';
 
 @Entity()
 export class CalledStock {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => StockSymbol, stockSymbol => stockSymbol.id)
+  @ManyToOne(() => StockSymbol, (stockSymbol) => stockSymbol.id)
   @JoinColumn()
   stockSymbol: StockSymbol;
 
-  @ManyToOne(() => Wallet, wallet => wallet.calledStocks)
+  @ManyToOne(() => Wallet, (wallet) => wallet.calledStocks)
   wallet: Wallet;
 
   @Column()
@@ -35,9 +35,13 @@ export class CalledStock {
   buyPrice: number;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   @IsNumber()
   @IsOptional()
   sellPrice: number;
+
+  @IsBoolean()
+  @IsOptional()
+  deleted: boolean;
 }
