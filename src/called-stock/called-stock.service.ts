@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Between, Repository} from 'typeorm';
 import { CalledStock } from './entities/called-stock.entity';
 import { Wallet } from '../wallet/entities/wallet.entity';
 import { StockSymbol } from '../stock-symbol/entities/stock-symbol.entity';
@@ -23,8 +23,8 @@ export class CalledStockService {
     return this.calledStockRepository.findBy({ deleted: false });
   }
 
-  findOne(id: number): Promise<CalledStock> {
-    return this.calledStockRepository.findOneBy({ id: id, deleted: false });
+  findBetweenDates(startDate: Date, endDate: Date): Promise<CalledStock[]> {
+    return this.calledStockRepository.findBy({ calledDate: Between(startDate, endDate), deleted: false });
   }
 
   async create(
@@ -52,12 +52,22 @@ export class CalledStockService {
     return calledStockSave;
   }
 
-  async remove(id: number): Promise<void> {
+  async sellById(id: number): Promise<void> {
     const calledStock: CalledStock = await this.calledStockRepository.findOneBy(
       { id: id },
     );
+    this.sellCalledStock(calledStock);
+  }
+
+  async sellByFirstStockSymbol(symbol: string, date: Date): Promise<void> {
+    const calledStock: CalledStock = await this.calledStockRepository.findOneBy({stockSymbol: {symbol: symbol},
+      calledDate: date, deleted:false});
+    this.sellCalledStock(calledStock);
+  }
+
+  private async sellCalledStock(calledStock: CalledStock){
     const sellPrice: number = (
-      await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol.symbol)
+        await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol.symbol)
     ).c;
     const wallet: Wallet = calledStock.wallet;
     wallet.value += sellPrice * calledStock.quantity;

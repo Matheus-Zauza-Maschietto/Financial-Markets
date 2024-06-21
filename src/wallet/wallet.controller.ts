@@ -12,7 +12,7 @@ export class WalletController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Wallet> {
-    return this.walletService.findOne(Number(id));
+  findOne(@Param('id') id: number): Promise<Wallet> {
+    return this.walletService.findOne(id);
   }
 }

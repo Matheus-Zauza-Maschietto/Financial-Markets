@@ -1,6 +1,5 @@
-import {Controller, Get, Post, Body, Param, Delete, Query} from '@nestjs/common';
+import {Controller, Get, Param, Query} from '@nestjs/common';
 import {StockSymbolService} from "./stock-symbol.service";
-import {StockSymbol} from "./entities/stock-symbol.entity";
 import {StockSymbolDTO} from "./dto/stock-symbol-res.dto";
 import {toStockSymbolDTO} from "./converter/stock-symbol.converter";
 
