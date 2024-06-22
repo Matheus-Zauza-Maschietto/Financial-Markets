@@ -1,9 +1,8 @@
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StockSymbolModule } from './stock-symbol/stock-symbol.module';
 import { QuoteModule } from './quote/quote.module';
-import { FinnhubModule } from './finnhub/finnhub.module';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModule } from './person/person.module';
@@ -15,6 +14,7 @@ import { Person } from './person/entities/person.entity';
 import { User } from './user/entities/user.entity';
 import { StockSymbol } from './stock-symbol/entities/stock-symbol.entity';
 import { CalledStock } from './called-stock/entities/called-stock.entity';
+import { LoggerMiddleware } from './middlewares/logging.middleware';
 
 @Module({
   imports: [
@@ -43,4 +43,10 @@ import { CalledStock } from './called-stock/entities/called-stock.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
