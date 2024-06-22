@@ -16,7 +16,10 @@ export class PersonService {
   }
 
   public async findAll(): Promise<Person[]> {
-    return await this.personRepository.find();
+    return await this.personRepository.find({
+      relations: {
+        wallet: true
+      }});
   }
 
   public async findOne(id: number): Promise<Person> {

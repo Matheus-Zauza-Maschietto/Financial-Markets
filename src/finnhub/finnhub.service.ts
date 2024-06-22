@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import finnhub from 'finnhub';
 
 @Injectable()
 export class FinnhubService {

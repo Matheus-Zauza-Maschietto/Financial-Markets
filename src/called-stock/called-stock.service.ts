@@ -24,7 +24,7 @@ export class CalledStockService {
   }
 
   findBetweenDates(startDate: Date, endDate: Date): Promise<CalledStock[]> {
-    return this.calledStockRepository.findBy({ calledDate: Between(startDate, endDate), deleted: false });
+    return this.calledStockRepository.findBy({ calledDate: Between(new Date(startDate), new Date(endDate)), deleted: false });
   }
 
   async create(
@@ -59,15 +59,9 @@ export class CalledStockService {
     this.sellCalledStock(calledStock);
   }
 
-  async sellByFirstStockSymbol(symbol: string, date: Date): Promise<void> {
-    const calledStock: CalledStock = await this.calledStockRepository.findOneBy({stockSymbol: {symbol: symbol},
-      calledDate: date, deleted:false});
-    this.sellCalledStock(calledStock);
-  }
-
   private async sellCalledStock(calledStock: CalledStock){
     const sellPrice: number = (
-        await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol.symbol)
+        await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol?.symbol)
     ).c;
     const wallet: Wallet = calledStock.wallet;
     wallet.value += sellPrice * calledStock.quantity;

@@ -31,9 +31,4 @@ export class CalledStockController {
   sellById(@Param('id') id: number): Promise<void> {
     return this.calledStockService.sellById(id);
   }
-
-  @Delete(':symbol/:date')
-  sellByStockSymbolAndDate(@Param('symbol') symbol: string, @Param('date') date: Date): Promise<void> {
-    return this.calledStockService.sellByFirstStockSymbol(symbol, date);
-  }
 }
