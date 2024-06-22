@@ -1,10 +1,10 @@
-import {Controller, Get, HttpException, HttpStatus, Param} from '@nestjs/common';
+import {Controller, Delete , Get, HttpException, HttpStatus, Param , Post } from '@nestjs/common';
 import {WalletService} from './wallet.service';
 import {Wallet} from './entities/wallet.entity';
 
 @Controller('wallets')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) {}
+  constructor(private readonly walletService: WalletService) { }
 
   @Get()
   findAll(): Promise<Wallet[]> {
@@ -22,5 +22,15 @@ export class WalletController {
     } catch (e) {
       throw new HttpException('Erro ao consultar as carteiras de compra.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @Post(':id')
+  create(@Param('id') id: number): Promise<Wallet> {
+    return this.walletService.create(id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<void> {
+    return this.walletService.remove(Number(id));
   }
 }
