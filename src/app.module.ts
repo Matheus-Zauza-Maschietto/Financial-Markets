@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StockSymbolModule } from './stock-symbol/stock-symbol.module';
 import { QuoteModule } from './quote/quote.module';
-import { FinnhubModule } from './finnhub/finnhub.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PersonModule } from './person/person.module';
@@ -16,6 +15,8 @@ import { User } from './user/entities/user.entity';
 import { StockSymbol } from './stock-symbol/entities/stock-symbol.entity';
 import { CalledStock } from './called-stock/entities/called-stock.entity';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -43,6 +44,12 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule { }
