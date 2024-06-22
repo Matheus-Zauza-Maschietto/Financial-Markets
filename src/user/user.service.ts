@@ -5,13 +5,11 @@ import {User} from "./entities/user.entity";
 import { error } from 'console';
 import { promises } from 'dns';
 
-//export type User = any;
-
 @Injectable()
 export class UserService {
   constructor(
-      @InjectRepository(User)
-      private userRepository: Repository<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   findAll(): Promise<User[]> {
@@ -58,3 +56,4 @@ export class UserService {
   }
   
 }
+

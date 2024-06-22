@@ -7,24 +7,20 @@ import {
 } from 'typeorm';
 import { Wallet } from '../../wallet/entities/wallet.entity';
 import { User } from '../../user/entities/user.entity';
-import {IsOptional, IsString, MaxLength, MinLength} from "class-validator";
-
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 @Entity()
 export class Person {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column()
   @IsString()
   name: string;
-
   @Column({
     nullable: true,
   })
   @IsOptional()
   bornDate: Date;
-
   @IsString()
   @MaxLength(11)
   @MinLength(11)

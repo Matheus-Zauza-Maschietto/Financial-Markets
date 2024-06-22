@@ -1,24 +1,26 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { PersonService } from './person.service';
-import { Person } from './entities/person.entity';
-import { CreatePersonDto } from './dto/create-person.dto';
+import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {PersonService} from './person.service';
+import {Person} from './entities/person.entity';
+import {CreatePersonDto} from './dto/create-person.dto';
+import {ViewPersonDto} from "./dto/view-person.dto";
+import {toViewPersonDto} from "./converter/view-called-stock.converter";
 
 @Controller('persons')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Get()
-  findAll(): Promise<Person[]> {
-    return this.personService.findAll();
+  async findAll(): Promise<ViewPersonDto[]> {
+    return (await this.personService.findAll()).map(p => toViewPersonDto(p));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Person> {
-    return this.personService.findOne(Number(id));
+  async findOne(@Param('id') id: number): Promise<ViewPersonDto> {
+    return toViewPersonDto(await this.personService.findAllReletionById(id));
   }
 
   @Post()
-  create(@Body() personDto: CreatePersonDto): Promise<Person> {
+  async create(@Body() personDto: CreatePersonDto): Promise<ViewPersonDto> {
     const newPerson: Person = {
       bornDate: personDto.bornDate,
       cpf: personDto.cpf,
@@ -27,7 +29,7 @@ export class PersonController {
       user: null,
       id: null,
     };
-    return this.personService.create(newPerson);
+    return toViewPersonDto(await this.personService.create(newPerson));
   }
 
   @Delete(':id')

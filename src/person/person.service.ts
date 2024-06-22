@@ -16,7 +16,10 @@ export class PersonService {
   }
 
   public async findAll(): Promise<Person[]> {
-    return await this.personRepository.find();
+    return await this.personRepository.find({
+      relations: {
+        wallet: true
+      }});
   }
 
   public async findOne(id: number): Promise<Person> {
@@ -41,5 +44,20 @@ export class PersonService {
 
   public async remove(id: number) {
     await this.personRepository.delete({ id: id });
+  }
+
+  public async findAllReletionById(id: number): Promise<Person>{
+    return await this.personRepository.findOne({
+      where: {
+        id: id
+      },
+      relations: {
+        wallet: {
+          calledStocks: {
+            stockSymbol: true
+          },
+        }
+      },
+    });
   }
 }

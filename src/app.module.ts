@@ -1,4 +1,3 @@
-import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StockSymbolModule } from './stock-symbol/stock-symbol.module';
@@ -17,6 +16,10 @@ import { CalledStock } from './called-stock/entities/called-stock.entity';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { LoggerMiddleware } from './middlewares/logging.middleware';
+import { LogModule } from './log/log.module';
+import { Log } from './log/entities/log.entity';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { AuthGuard } from './auth/auth.guard';
       synchronize: true,
       autoLoadEntities: true,
       logging: true,
-      entities: [Wallet, Person, User, CalledStock, StockSymbol],
+      entities: [Wallet, Person, User, CalledStock, StockSymbol, Log],
       options: { trustServerCertificate: true },
     }),
     StockSymbolModule,
@@ -42,6 +45,7 @@ import { AuthGuard } from './auth/auth.guard';
     WalletModule,
     CalledStockModule,
     AuthModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [
@@ -52,4 +56,11 @@ import { AuthGuard } from './auth/auth.guard';
     },
   ],
 })
-export class AppModule { }
+
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

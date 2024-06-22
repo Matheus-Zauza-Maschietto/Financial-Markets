@@ -19,11 +19,11 @@ export class Wallet {
   @IsNumber()
   value: number;
 
-  @OneToOne(() => Person, (person) => person.id)
+  @OneToOne(() => Person, (person) => person.wallet)
   @JoinColumn()
   person: Person;
 
-  @OneToMany(() => CalledStock, (calledStock) => calledStock.id)
+  @OneToMany(() => CalledStock, (calledStock) => calledStock.wallet)
   @JoinColumn()
   calledStocks: CalledStock[];
 
