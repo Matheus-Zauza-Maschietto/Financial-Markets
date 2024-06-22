@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {User} from "./entities/user.entity";
+import { error } from 'console';
+import { promises } from 'dns';
 
 //export type User = any;
 
@@ -20,25 +22,12 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
-  //autenticacao 
-  // private readonly users = [
-  //   {
-  //     userId: 1,
-  //     username: 'john',
-  //     password: 'changeme',
-  //   },
-  //   {
-  //     userId: 2,
-  //     username: 'maria',
-  //     password: 'guess',
-  //   },
-  // ];
-
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.findOne({ where: { email } }); 
   }
 
-  create(user: User): Promise<User> {
+  async create(user: User): Promise<User> {
+    await this.crypt(user);
     return this.userRepository.save(user);
   }
 
@@ -46,5 +35,26 @@ export class UserService {
     await this.userRepository.delete(id);
   }
 
+  crypt(user: User): Promise<void> {
+    const bcrypt = require('bcrypt');
+    const saltRounds = 10;
+    const myPlaintextPassword = user.password;
+    
+
+    return bcrypt.genSalt(saltRounds, function(err, salt) {
+        if(err) {
+          throw new Error(err)
+        }
+      
+      bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+        
+        if(err) {
+          throw new Error(err)
+        }
+
+        user.password = hash;
+      });
+    });
+  }
   
 }
