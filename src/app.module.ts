@@ -15,6 +15,8 @@ import { User } from './user/entities/user.entity';
 import { StockSymbol } from './stock-symbol/entities/stock-symbol.entity';
 import { CalledStock } from './called-stock/entities/called-stock.entity';
 import { LoggerMiddleware } from './middlewares/logging.middleware';
+import { LogModule } from './log/log.module';
+import { Log } from './log/entities/log.entity';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { LoggerMiddleware } from './middlewares/logging.middleware';
       synchronize: true,
       autoLoadEntities: true,
       logging: true,
-      entities: [Wallet, Person, User, CalledStock, StockSymbol],
+      entities: [Wallet, Person, User, CalledStock, StockSymbol, Log],
       options: { trustServerCertificate: true },
     }),
     StockSymbolModule,
@@ -39,6 +41,7 @@ import { LoggerMiddleware } from './middlewares/logging.middleware';
     PersonModule,
     WalletModule,
     CalledStockModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

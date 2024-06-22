@@ -13,17 +13,14 @@ import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 export class Person {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column()
   @IsString()
   name: string;
-
   @Column({
     nullable: true,
   })
   @IsOptional()
   bornDate: Date;
-
   @IsString()
   @MaxLength(11)
   @MinLength(11)
