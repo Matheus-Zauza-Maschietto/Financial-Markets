@@ -56,10 +56,10 @@ export class CalledStockService {
     const calledStock: CalledStock = await this.calledStockRepository.findOneBy(
       { id: id },
     );
-    this.sellCalledStock(calledStock);
+    await this.sellCalledStock(calledStock);
   }
 
-  private async sellCalledStock(calledStock: CalledStock){
+  private async sellCalledStock(calledStock: CalledStock): Promise<void>{
     const sellPrice: number = (
         await this.quoteService.getQuotePerSymbol(calledStock.stockSymbol?.symbol)
     ).c;

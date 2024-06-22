@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import {IsNumber, IsOptional, IsString} from 'class-validator';
 
 export class StockSymbolDTO {
 
@@ -13,4 +13,8 @@ export class StockSymbolDTO {
     @IsOptional()
     @IsString()
     displaySymbol?: string;
+
+    @IsOptional()
+    @IsNumber()
+    value?: number;
 }

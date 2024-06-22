@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import { StockSymbol } from './entities/stock-symbol.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FinnhubService } from '../finnhub/finnhub.service';
+import {QuoteService} from "../quote/quote.service";
+import {StockSymbolDTO} from "./dto/stock-symbol-res.dto";
+import {toStockSymbolDTO} from "./converter/stock-symbol.converter";
 
 @Injectable()
 export class StockSymbolService {
@@ -10,6 +13,9 @@ export class StockSymbolService {
     @InjectRepository(StockSymbol)
     private stockRepository: Repository<StockSymbol>,
     private readonly finnhubService: FinnhubService,
+    @Inject(QuoteService)
+    private quoteService: QuoteService
+    ,
   ) {}
 
   async findAll(limit: number): Promise<StockSymbol[]> {
@@ -17,12 +23,18 @@ export class StockSymbolService {
         this.stockRepository.find({take: limit});
   }
 
-  async findById(id: number): Promise<StockSymbol> {
-    return this.stockRepository.findOneBy({ id: id });
+  async findById(id: number): Promise<StockSymbolDTO> {
+    const stock: StockSymbolDTO = toStockSymbolDTO(await this.stockRepository.findOneBy({ id: id }));
+    const quote = await this.quoteService.getQuotePerSymbol(stock.displaySymbol);
+    stock.value = quote.c
+    return stock;
   }
 
-  async findBySymbol(symbol: string): Promise<StockSymbol> {
-    return this.stockRepository.findOneBy({ displaySymbol: symbol });
+  async findBySymbol(symbol: string): Promise<StockSymbolDTO> {
+    const stock: StockSymbolDTO = toStockSymbolDTO(await this.stockRepository.findOneBy({ displaySymbol: symbol }));
+    const quote = await this.quoteService.getQuotePerSymbol(stock.displaySymbol);
+    stock.value = quote.c
+    return stock;
   }
 
   async saveFromApiToDataBase(): Promise<void> {
@@ -36,17 +48,19 @@ export class StockSymbolService {
     // await Promise.all(apiChunked.map((c) => new Promise(() => this.stockRepository.save(c))));
     // apiChunked.forEach(c =>
     //   new Promise(() => this.stockRepository.save(c))
-    // );
+    // ); 40 segundos
 
     for (let i = 0; i < api.length; i += 200) {
-      console.log(`${i} - ${api.length - i > 200 ? 200 : api.length - i}`);
-      this.stockRepository
-        .createQueryBuilder()
-        .insert()
-        .into(StockSymbol)
-        .values(api.slice(i, i + 200 > api.length ? api.length : i + 200))
-        .execute();
-    }
+      // console.log(`${i} - ${api.length - i > 200 ? 200 : api.length - i}`);
+      new Promise(() => {
+        this.stockRepository
+            .createQueryBuilder()
+            .insert()
+            .into(StockSymbol)
+            .values(api.slice(i, i + 200 > api.length ? api.length : i + 200))
+            .execute();
+      });
+    } // 15 segs
   }
 
   private getValuesFromApi(): Promise<StockSymbol[]>{
