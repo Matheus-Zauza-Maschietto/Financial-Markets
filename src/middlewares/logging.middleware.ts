@@ -20,7 +20,6 @@ export class LoggerMiddleware implements NestMiddleware {
       time: createLogDto.time,
     };
 
-    console.log(logDto);
 
     await this._logRepository.save(logDto);
   }
@@ -35,8 +34,6 @@ export class LoggerMiddleware implements NestMiddleware {
         method: req.method,
         time: dateEnd - dateStart,
       });
-      console.log(`
-        Request for: ${req.url} with method: ${req.method}. Request time: ${dateEnd - dateStart}`);
     });
     next();
   }

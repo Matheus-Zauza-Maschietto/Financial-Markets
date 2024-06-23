@@ -1,21 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { UpdatePersonDto } from './dto/update-person.dto';
-import { Repository } from 'typeorm';
-import { Person } from './entities/person.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import {Inject, Injectable} from '@nestjs/common';
+import {UpdatePersonDto} from './dto/update-person.dto';
+import {Repository} from 'typeorm';
+import {Person} from './entities/person.entity';
+import {InjectRepository} from '@nestjs/typeorm';
+import {WalletService} from "../wallet/wallet.service";
 
 @Injectable()
 export class PersonService {
   private readonly personRepository: Repository<Person>;
-  constructor(@InjectRepository(Person) personRepository: Repository<Person>) {
+  constructor(@InjectRepository(Person) personRepository: Repository<Person>,
+              @Inject(WalletService) private walletService: WalletService) {
     this.personRepository = personRepository;
   }
 
   public async create(createPersonDto: Person): Promise<Person> {
-    return await this.personRepository.save(createPersonDto);
+    const person: Person = await this.personRepository.save(createPersonDto);
+    await this.walletService.create(person.id);
+    return person;
   }
 
   public async findAll(): Promise<Person[]> {
+
     return await this.personRepository.find({
       relations: {
         wallet: true

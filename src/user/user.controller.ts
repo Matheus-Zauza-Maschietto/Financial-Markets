@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
+import {Public} from "../auth/auth.guard";
 
 @Controller('users')
 export class UserController {
@@ -17,6 +18,7 @@ export class UserController {
   // }
 
   @Post()
+  @Public()
   create(@Body() user: User): Promise<User> {
     return this.userService.create(user);
   }

@@ -33,25 +33,26 @@ export class UserService {
     await this.userRepository.delete(id);
   }
 
-  crypt(user: User): Promise<void> {
+  async crypt(user: User): Promise<void> {
     const bcrypt = require('bcrypt');
     const saltRounds = 10;
     const myPlaintextPassword = user.password;
     
 
-    return bcrypt.genSalt(saltRounds, function(err, salt) {
-        if(err) {
-          throw new Error(err)
-        }
-      
-      bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
-        
-        if(err) {
-          throw new Error(err)
+    user.password = await new Promise((resolve, reject) => {
+      bcrypt.genSalt(saltRounds, function (err, salt) {
+        if (err) {
+          throw new Error(err);
         }
 
-        user.password = hash;
-      });
+        return bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+
+          if (err) {
+            throw new Error(err);
+          }
+          resolve(hash);
+        });
+      })
     });
   }
   
