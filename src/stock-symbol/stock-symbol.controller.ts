@@ -2,6 +2,7 @@ import {Controller, Get, HttpException, HttpStatus, Param, Query} from '@nestjs/
 import {StockSymbolService} from "./stock-symbol.service";
 import {StockSymbolDTO} from "./dto/stock-symbol-res.dto";
 import {toStockSymbolDTO} from "./converter/stock-symbol.converter";
+import {Public} from "../auth/auth.guard";
 
 @Controller('stock-symbol')
 export class StockSymbolController {
@@ -39,6 +40,7 @@ export class StockSymbolController {
   }
 
   @Get('/api/populete')
+  @Public()
   async populateDatabase(): Promise<string> {
     try{
       await this.stockSymbolService.saveFromApiToDataBase();

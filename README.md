@@ -71,3 +71,42 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+---
+
+## Carteira de Ações - controle suas ações de compra e venda com a gente!!!
+
+## 💰💲🤑
+
+---
+
+## Start Project
+
+Para iniciar o projeto:
+
+- Necessário subir o docker:
+- Usando os comandos:
+```bash
+# Entrar na pasta do docker
+$ cd docker
+
+# Com o docker rodando, execute docker-compose up para criar o banco
+$ docker-compose up
+
+# Em caso de erro, veja sem na pasta docker possui uma pasta db_volume,
+# se ela existir, exclua e tente o comando de cima novamente
+```
+
+- Execute ` npm run start:dev ` para subir o projeto
+
+---
+
+## Populando o Projeto
+
+Como os dados principais do nosso projeto veem de uma API, acesse a rota
+`/stock-symbol/api/populete` para popular os dados do banco. 
+Demorará um pouco, pois estamos buscando 27 mil ações da bolsa americana,
+porém todos esses dados se encontraram no banco logo em seguida
+
+Após isso é só usar o sistema, criando usuário, autentificando as rotas e comprar / vender ações nas rotas com `/calledstock`
