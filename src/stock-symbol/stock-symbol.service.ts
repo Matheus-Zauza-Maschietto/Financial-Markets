@@ -14,9 +14,7 @@ export class StockSymbolService {
     private stockRepository: Repository<StockSymbol>,
     private readonly finnhubService: FinnhubService,
     @Inject(QuoteService)
-    private quoteService: QuoteService
-    ,
-  ) {}
+    private quoteService: QuoteService) {}
 
   async findAll(limit: number): Promise<StockSymbol[]> {
     return !limit ? this.stockRepository.find() :
@@ -51,7 +49,6 @@ export class StockSymbolService {
     // ); 40 segundos
 
     for (let i = 0; i < api.length; i += 200) {
-      // console.log(`${i} - ${api.length - i > 200 ? 200 : api.length - i}`);
       new Promise(() => {
         this.stockRepository
             .createQueryBuilder()
