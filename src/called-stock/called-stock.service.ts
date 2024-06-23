@@ -43,6 +43,11 @@ export class CalledStockService {
       await this.quoteService.getQuotePerSymbol(symbol)
     ).c;
     calledStock.calledDate = new Date();
+
+    if(!calledStock.stockSymbol){
+      throw new Error();
+    }
+
     const calledStockSave: Promise<CalledStock> =
       this.calledStockRepository.save(calledStock);
 

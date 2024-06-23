@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import {ConflictException, Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {User} from "./entities/user.entity";
 import { error } from 'console';
 import { promises } from 'dns';
+import {PersonService} from "../person/person.service";
+import {Person} from "../person/entities/person.entity";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @Inject(PersonService)
+    private personService: PersonService
   ) {}
 
   findAll(): Promise<User[]> {
@@ -25,8 +29,16 @@ export class UserService {
   }
 
   async create(user: User): Promise<User> {
+    const repetedUserEmail: User = await this.userRepository.findOneBy({email: user.email});
+    if(repetedUserEmail){
+      throw new ConflictException('Usuário já cadastrado para esse email.');
+    }
     await this.crypt(user);
-    return this.userRepository.save(user);
+    const person: Person = await this.personService.create(user.person);
+    const userSaved: User = await this.userRepository.save(user);
+    user.person.user = userSaved;
+    await this.personService.updateUser(person);
+    return userSaved;
   }
 
   async remove(id: number): Promise<void> {

@@ -18,6 +18,10 @@ export class WalletService {
     return this.walletRepository.find();
   }
 
+  async findWalletIdByUserId(userId: number): Promise<number> {
+    return (await this.walletRepository.findOneBy({person: {user: {id: userId}}})).id;
+  }
+
   async findOne(id: number): Promise<Wallet> {
     return this.walletRepository.findOneBy({ id });
   }

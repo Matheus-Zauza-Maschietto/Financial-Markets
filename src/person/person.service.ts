@@ -47,6 +47,12 @@ export class PersonService {
     });
   }
 
+  public async updateUser( person: Person
+  ): Promise<void> {
+    await this.personRepository.update({id: person.id},
+        {user: person.user});
+  }
+
   public async remove(id: number) {
     await this.personRepository.delete({ id: id });
   }

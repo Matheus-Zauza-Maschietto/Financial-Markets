@@ -4,21 +4,25 @@ import {toCalledStock} from "./converter/create-called-stock.converter";
 import {ViewCalledStockDto} from "./dto/view-called-stock.dto";
 import {toViewCalledStockDto} from "./converter/view-called-stock.converter";
 import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Post,
-  Query
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get, Headers,
+    HttpException,
+    HttpStatus, Inject,
+    Param,
+    Post,
+    Query
 } from "@nestjs/common";
+import {JwtService} from "@nestjs/jwt";
+import {WalletService} from "../wallet/wallet.service";
 
 @Controller('calledstocks')
 export class CalledStockController {
-    constructor(private readonly calledStockService: CalledStockService) {
+    constructor(private readonly calledStockService: CalledStockService,
+                private readonly jwtService: JwtService,
+                @Inject(WalletService) private walletService: WalletService) {
     }
 
     @Get()
@@ -49,9 +53,15 @@ export class CalledStockController {
 
     @Post(':displaySymbol')
     async create(@Param('displaySymbol') symbol: string,
+                 @Headers('authorization') payload: string,
                  @Body() calledStock: CreateCalledStockDto): Promise<ViewCalledStockDto> {
+        const token = payload.split(' ')[1];
+        const decoded = this.jwtService.decode(token) as { sub: number };
+        const userId = decoded.sub;
+        console.log(userId)
         try {
-            const walletId: number = 1;
+            const walletId: number = await this.walletService.findWalletIdByUserId(userId);
+            console.log(walletId)
             return toViewCalledStockDto(await this.calledStockService.create(toCalledStock(calledStock), walletId, symbol));
         } catch (e) {
             throw new HttpException('Erro ao comprar uma ação. Pode ser conexão com API ou informações erradas.',
