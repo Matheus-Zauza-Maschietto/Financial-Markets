@@ -58,10 +58,8 @@ export class CalledStockController {
         const token = payload.split(' ')[1];
         const decoded = this.jwtService.decode(token) as { sub: number };
         const userId = decoded.sub;
-        console.log(userId)
         try {
             const walletId: number = await this.walletService.findWalletIdByUserId(userId);
-            console.log(walletId)
             return toViewCalledStockDto(await this.calledStockService.create(toCalledStock(calledStock), walletId, symbol));
         } catch (e) {
             throw new HttpException('Erro ao comprar uma ação. Pode ser conexão com API ou informações erradas.',
